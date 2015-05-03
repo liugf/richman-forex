@@ -1,4 +1,5 @@
 # encoding: utf-8
+#!/usr/bin/python
 
 import sys, sqlite3, datetime, time, order
 from threading import Timer
@@ -31,5 +32,6 @@ while True:
 		Timer(time_diff-60, order.create, (event['timestamp'], event['title'])).start()
 
 	print 'MainThead going to sleep'
+	sys.stdout.flush()
 	time.sleep(3599*3) # 约停止3小时
 	print 'MainThead wake up'
