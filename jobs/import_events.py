@@ -3,6 +3,8 @@
 
 import sys, sqlite3, datetime, requests, json, time
 
+print '---start---'
+
 conn = sqlite3.connect('../var/database.db')
 cursor = conn.cursor()
 
@@ -43,3 +45,5 @@ print 'insert %d events' % len(events)
 
 conn.commit()
 conn.close()
+
+print '---end---'
