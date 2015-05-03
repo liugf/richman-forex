@@ -3,7 +3,7 @@ CREATE TABLE `events` (
   `timestamp` int(11) NOT NULL,
   `local_time` varchar(255) NOT NULL DEFAULT '',
   `importance` int(11) NOT NULL,
-  `tilte` varchar(255) NOT NULL DEFAULT '',
+  `title` varchar(255) NOT NULL DEFAULT '',
   `previous` float DEFAULT '0',
   `revised` float DEFAULT '0',
   `forecast` float DEFAULT '0',

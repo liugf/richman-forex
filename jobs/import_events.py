@@ -34,7 +34,7 @@ cursor.execute('delete from events where timestamp >= ? and timestamp < ?',
 events = content['results']
 
 for event in events:
-	sql = '''INSERT INTO events (timestamp, local_time, importance, tilte, previous, revised, forecast, \
+	sql = '''INSERT INTO events (timestamp, local_time, importance, title, previous, revised, forecast, \
 	actual, country, currency, data_name, event_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	'''
 	cursor.execute(sql, (event['timestamp'], event['localDateTime'], event['importance'], event['title'], 
