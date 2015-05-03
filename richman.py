@@ -11,27 +11,25 @@ sys.setdefaultencoding('utf-8')
 
 # 创建一个logger
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
-# 创建一个handler，用于写入日志文件
-fh = logging.FileHandler('var/richman.log')
-fh.setLevel(logging.DEBUG)
-
-# 再创建一个handler，用于输出到控制台
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
-
 # 定义handler的输出格式
 formatter = logging.Formatter('[%(levelname)s] %(asctime)s  %(message)s')
-fh.setFormatter(formatter)
-ch.setFormatter(formatter)
 
-# 给logger添加handler
-logger.addHandler(fh)
-logger.addHandler(ch)
+if len(sys.argv) > 1 and sys.argv[1] == 'production':
+	# 创建一个handler，用于写入日志文件
+	fh = logging.FileHandler('var/richman.log')
+	fh.setLevel(logging.INFO)
+	fh.setFormatter(formatter)
+	logger.setLevel(logging.INFO)
+	logger.addHandler(fh)
+else :
+	# 创建一个handler，用于输出到控制台
+	ch = logging.StreamHandler()
+	ch.setLevel(logging.DEBUG)
+	ch.setFormatter(formatter)
+	logger.setLevel(logging.DEBUG)
+	logger.addHandler(ch)
 
-
-last_event_time = 0;
+last_event_time = 0
 
 while True:
 	now = datetime.datetime.utcnow()
