@@ -1,16 +1,18 @@
 # encoding: utf-8
 #!/usr/bin/python
 
-import sys, sqlite3, datetime, requests, json
+import sys, sqlite3, datetime, requests, json, time
 
 conn = sqlite3.connect('../var/database.db')
 cursor = conn.cursor()
 
-start_time = datetime.datetime.utcnow();
-end_time = start_time + datetime.timedelta(8) # 八天后
+start_day = datetime.date.today();
+end_day = start_day + datetime.timedelta(8) # 八天后
 
-start_str = start_time.strftime('%Y-%m-%d')
-end_str = end_time.strftime('%Y-%m-%d')
+start_str = start_day.strftime('%Y-%m-%d')
+end_str = end_day.strftime('%Y-%m-%d')
+
+print 'From %s To %s' % (start_str, end_str)
 
 base_url = 'http://api.markets.wallstreetcn.com/v1/calendar.json'
 
@@ -24,6 +26,9 @@ content = json.loads(content)
 if not content['count']:
 	sys.exit(0)
 
+cursor.execute('delete from events where timestamp >= ? and timestamp < ?', 
+	(time.mktime(start_day.timetuple()), time.mktime((end_day+ datetime.timedelta(1)).timetuple())))
+
 events = content['results']
 
 for event in events:
@@ -31,10 +36,10 @@ for event in events:
 	actual, country, currency, data_name, event_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	'''
 	cursor.execute(sql, (event['timestamp'], event['localDateTime'], event['importance'], event['title'], 
-					event['previous'], event['revised'], event['forecast'], event['actual'], 
-					event['country'], event['currency'], event['event_attr_id'], event['calendarType']))
+		event['previous'], event['revised'], event['forecast'], event['actual'], 
+		event['country'], event['currency'], event['event_attr_id'], event['calendarType']))
 
-print 'insert %d events' % content['count']
+print 'insert %d events' % len(events)
 
 conn.commit()
 conn.close()
