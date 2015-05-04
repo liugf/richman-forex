@@ -16,7 +16,7 @@ formatter = logging.Formatter('[%(levelname)s] %(asctime)s  %(message)s')
 
 if len(sys.argv) > 1 and sys.argv[1] == 'production':
 	# 创建一个handler，用于写入日志文件
-	fh = logging.FileHandler('var/richman.log')
+	fh = logging.FileHandler('./var/richman.log')
 	fh.setLevel(logging.INFO)
 	fh.setFormatter(formatter)
 	logger.setLevel(logging.INFO)
@@ -32,7 +32,8 @@ else :
 last_event_time = 0
 
 while True:
-	now = datetime.datetime.utcnow()
+	now = datetime.datetime.now()
+	print now
 	start = time.mktime(now.timetuple())
 	end = time.mktime((now + datetime.timedelta(0, 3600*5)).timetuple())
 
@@ -43,13 +44,16 @@ while True:
 	events = cursor.fetchall()
 	conn.close()
 
+	print events
 	for event in events:
 		if event['timestamp'] < last_event_time + 300:
 			continue
 
 		last_event_time = event['timestamp']
-		time_diff = event['timestamp'] - time.mktime(datetime.datetime.utcnow().timetuple())
+		time_diff = event['timestamp'] - time.mktime(datetime.datetime.now().timetuple())
 		Timer(time_diff-60, order.create, (event['timestamp'], event['title'])).start()
+		task_time = datetime.datetime.fromtimestamp(event['timestamp']).strftime('%Y-%m-%d %H:%M:%S')
+		logger.info('Add a task at %s' % task_time)
 
 	logger.info('MainThead going to sleep')
 	sys.stdout.flush()

@@ -14,6 +14,7 @@ def create(timestamp, reason = ''):
 	upper_order = oanda.create_order(account_id, instrument="XAU_USD", units=1, side="buy", type="stop", price=xau_price['ask']+1, expiry=expiry_time)
 	lower_order = oanda.create_order(account_id, instrument="XAU_USD", units=1, side="sell", type="stop", price=xau_price['bid']-1, expiry=expiry_time)
 
-	msg = 'New order around %.3f; Reason: %s' % (xau_mid_price, reason)
+	time_str = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+	msg = 'New order around %.3f; Reason: %s %s' % (xau_mid_price, time_str, reason)
 	logger.info(msg)
 	message.send(msg)
