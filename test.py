@@ -1,6 +1,35 @@
+# encoding: utf-8
+#!/usr/bin/python
+
 import oandapy
 import datetime
 import message
+import order, time, logging, sys
+
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+# 创建一个logger
+logger = logging.getLogger()
+# 定义handler的输出格式
+formatter = logging.Formatter('[%(levelname)s] %(asctime)s  %(message)s')
+
+if len(sys.argv) > 1 and sys.argv[1] == 'production':
+	# 创建一个handler，用于写入日志文件
+	fh = logging.FileHandler('./var/richman.log')
+	fh.setLevel(logging.INFO)
+	fh.setFormatter(formatter)
+	logger.setLevel(logging.INFO)
+	logger.addHandler(fh)
+else :
+	# 创建一个handler，用于输出到控制台
+	ch = logging.StreamHandler()
+	ch.setLevel(logging.DEBUG)
+	ch.setFormatter(formatter)
+	logger.setLevel(logging.DEBUG)
+	logger.addHandler(ch)
+
 
 oanda = oandapy.API(environment="practice", access_token="90c9fea896069cec944d4b03404a4725-3665345b9d5b4cc4cea8711349587903")
 
@@ -39,4 +68,12 @@ account_id = 767708
 
 # trade = oanda.modify_trade(account_id, 954384683, stopLoss=20)
 # print trade
+
+# now = datetime.datetime.now()
+# print now
+# order.create(time.mktime(now.timetuple()), 'test')
+
+trades = oanda.get_trades(account_id)
+print trades
+
 print "ok"

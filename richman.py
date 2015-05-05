@@ -51,7 +51,7 @@ while True:
 
 		last_event_time = event['timestamp']
 		time_diff = event['timestamp'] - time.mktime(datetime.datetime.now().timetuple())
-		Timer(time_diff-60, order.create, (event['timestamp'], event['title'])).start()
+		Timer(time_diff-5, order.create, (event['timestamp'], event['title'])).start()
 		task_time = datetime.datetime.fromtimestamp(event['timestamp']).strftime('%Y-%m-%d %H:%M:%S')
 		logger.info('Add a task at %s' % task_time)
 
