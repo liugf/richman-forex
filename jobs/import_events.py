@@ -35,11 +35,11 @@ events = content['results']
 
 for event in events:
 	sql = '''INSERT INTO events (timestamp, local_time, importance, title, previous, revised, forecast, \
-	actual, country, currency, data_name, event_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+	actual, country, currency, event_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	'''
 	cursor.execute(sql, (event['timestamp'], event['localDateTime'], event['importance'], event['title'], 
 		event['previous'], event['revised'], event['forecast'], event['actual'], 
-		event['country'], event['currency'], event['event_attr_id'], event['calendarType']))
+		event['country'], event['currency'], event['calendarType']))
 
 print 'insert %d events' % len(events)
 
